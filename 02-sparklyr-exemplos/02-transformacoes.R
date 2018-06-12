@@ -1,6 +1,8 @@
 library(sparklyr)
 library(tidyverse)
 
+install.packages( "nycflights13" )
+
 # Inicializa processo do Spark (ver processo Java em monitor de tarefas / monitor de atividades)
 sc <- spark_connect(master = "local")
 
@@ -12,9 +14,25 @@ spark_web(sc)
 
 # Uma operação simples de média.
 
-# Criar uma operação com dplyr para calcular a média de atraso de partida (dep_delay) por companhia aérea (carrier) em nycflights13::flights
+# Criar uma operação com dplyr para calcular a média de atraso de 
+# partida (dep_delay) por companhia aérea (carrier) em 
+# nycflights13::flights
+df_voo <- nycflights13::flights
+
+df_voo %>%
+  group_by(carrier) %>%
+  summarise(media_atraso_partida = mean(dep_delay, na.rm=TRUE)) %>%
+  ungroup() %>%
+as_tibble()
 
 # Repetir esta mesma operação com o flights_tbl
+flights_tbl %>%
+  group_by(carrier) %>%
+  summarise(media_atraso_partida = mean(dep_delay, na.rm=TRUE)) %>%
+  ungroup()
+# %>% collect() <- forçará fazer a operação completa
+# Irá dar erro pois ele transformará em uma instrução SQL e existem 
+# algumas diferenças nas sintáxes de funções
 
 # Agora atribuir o resultado da operação sparklyr para uma variável chamada media_atraso_partidas_companhias
 
