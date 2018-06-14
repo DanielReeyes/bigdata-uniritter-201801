@@ -12,6 +12,9 @@ sdf_schema(ratings_music)
 # java -jar ./avro-tools-1.7.7.jar getschema ~/Documents/Uniritter/2018/big-data/03-formatos-arquivos/data/subset_meta_Digital_Music.avro/*.avro
 # java -jar ./avro-tools-1.7.7.jar tojson --pretty ~/Documents/Uniritter/2018/big-data/03-formatos-arquivos/data/subset_meta_Digital_Music.avro/*.avro | head -1000
 
+#Bought_togheter: testa os itens hierárquicos, incica, quem comprou x também comprou y
+#sdf_select
+#sdf_explote
 ratings_music %>%
   sdf_select(asin, related$bought_together) %>%
   sdf_explode(bought_together) %>%
